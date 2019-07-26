@@ -36,8 +36,7 @@ The Documents in your Engine can be searched two ways: **full-text** (`search`) 
 
 You can think of an Engine as a database, DocumentTypes as tables, and Documents as rows. Using the API, you can search an Engine for all Documents containing a word. You can also search an individual DocumentType, or any subset of DocumentTypes.
 
-TODO Update me:
-The examples in this documentation use the schema defined in the [site-search-api-example](https://github.com/swiftype/swiftype-api-example) project, which is based on YouTube. It has two DocumentTypes, **videos** and **channels**. Using the script found in the swiftype-api-example project, you can create your own search engine that matches the examples and try the queries for yourself.
+The examples in this documentation use the schema defined in the [site-search-api-example](https://github.com/swiftype/site-search-api-example) project, which is based on YouTube. It has two DocumentTypes, **videos** and **channels**. Using the script found in the site-search-api-example project, you can create your own search engine that matches the examples and try the queries for yourself.
 
 To learn more about the Site Search API, read the [API overview](https://swiftype.com/documentation/site-search/overview) and our [schema design tutorial](https://swiftype.com/documentation/site-search/guides/schema-design).
 
@@ -60,12 +59,6 @@ Before issuing commands to the API, configure the client with your API key:
     Elastic::SiteSearch.api_key = 'YOUR_API_KEY'
 
 You can find your API key in your [Account Settings](https://app.swiftype.com/settings/account).
-
-TODO: Delete me
-
-If you're using Heroku, you can configure the client with the `SWIFTYPE_URL` configuration variable:
-
-    Elastic::SiteSearch.authenticated_url = ENV['SWIFTYPE_URL']
 
 ### Create a client
 

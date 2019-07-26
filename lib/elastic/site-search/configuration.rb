@@ -47,7 +47,6 @@ module Elastic
       end
 
       # Set api_key and endpoint based on a URL with HTTP authentication.
-      # Useful if you're using the Swiftype Heroku add-on.
       def authenticated_url=(url)
         uri = URI(url)
         self.api_key = uri.user
