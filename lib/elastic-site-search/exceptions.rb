@@ -1,4 +1,4 @@
-module Swiftype
+module ElasticSiteSearch
   class ClientException < StandardError; end
   class NonExistentRecord < ClientException; end
   class RecordAlreadyExists < ClientException; end

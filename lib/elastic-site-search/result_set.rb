@@ -1,6 +1,6 @@
-module Swiftype
-  # The Swiftype::ResultSet class represents a {search}[https://swiftype.com/documentation/searching]
-  # or {suggest result}[https://swiftype.com/documentation/autocomplete] returned by the Swiftype API.
+module ElasticSiteSearch
+  # The ElasticSiteSearch::ResultSet class represents a {search}[https://swiftype.com/documentation/site-search/searching]
+  # or {suggest result}[https://swiftype.com/documentation/site-search/autocomplete] returned by the ElasticSiteSearch API.
   class ResultSet
     # @attribute errors [r]
     # a hash of errors for the search (for example filtering on a missing attribute) keyed by DocumentType slug
@@ -15,7 +15,7 @@ module Swiftype
     # Use the convenience methods of this class for easier access.
     attr_reader :info
 
-    # Create a Swiftype::ResultSet from deserialized JSON.
+    # Create a ElasticSiteSearch::ResultSet from deserialized JSON.
     def initialize(results)
       @records = results['records']
       @info = results['info']

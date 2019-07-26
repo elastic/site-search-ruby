@@ -1,22 +1,22 @@
-require 'swiftype/configuration'
-require 'swiftype/result_set'
-require 'swiftype/request'
+require 'elastic-site-search/configuration'
+require 'elastic-site-search/result_set'
+require 'elastic-site-search/request'
 
-module Swiftype
-  # API client for the {Swiftype API}[https://swiftype.com/documentation/overview].
+module ElasticSiteSearch
+  # API client for the {Elastic Site Search API}[https://www.elastic.co/products/site-search/service].
   class Client
     DEFAULT_TIMEOUT = 15
 
-    include Swiftype::Request
+    include ElasticSiteSearch::Request
 
     def self.configure(&block)
-      warn "`Swiftype::Easy.configure` has been deprecated. Use `Swiftype.configure` instead."
-      Swiftype.configure &block
+      warn "`Swiftype::Easy.configure` has been deprecated. Use `ElasticSiteSearch.configure` instead."
+      ElasticSiteSearch.configure &block
     end
 
-    # Create a new Swiftype::Client client
+    # Create a new ElasticSiteSearch::Client client
     #
-    # @param options [Hash] a hash of configuration options that will override what is set on the Swiftype class.
+    # @param options [Hash] a hash of configuration options that will override what is set on the ElasticSiteSearch class.
     # @option options [String] :api_key an API Key to use for this client
     # @option options [String] :platform_access_token a user's access token, will be used instead of API key for authenticating requests
     # @option options [Numeric] :overall_timeout overall timeout for requests in seconds (default: 15s)
@@ -29,7 +29,7 @@ module Swiftype
     end
 
     def api_key
-      @options[:api_key] || Swiftype.api_key
+      @options[:api_key] || ElasticSiteSearch.api_key
     end
 
     def platform_access_token
@@ -52,23 +52,23 @@ module Swiftype
       [element].flatten(1)
     end
 
-    # Methods wrapping the Swiftype private search and API endpoints. Using these methods, you can perform full-text
+    # Methods wrapping the ElasticSiteSearch private search and API endpoints. Using these methods, you can perform full-text
     # and prefix searches over the Documents in your Engine, in a specific DocumentType, or any subset of DocumentTypes.
     # You can also filter results and get faceted counts for results.
     #
-    # For more information, visit the {REST API documentation on searching}[https://swiftype.com/documentation/searching].
+    # For more information, visit the {REST API documentation on searching}[https://swiftype.com/documentation/site-search/searching].
     module Search
       # Perform an autocomplete (prefix) search over all the DocumentTypes of the provided engine.
       # This can be used to implement type-ahead autocompletion. However, if your data is not sensitive,
-      # you should consider using the {Swiftype public JSONP API}[https://swiftype.com/documentation/public_api]
+      # you should consider using the {Site Search public JSONP API}[https://swiftype.com/documentation/site-search/searching#public_search]
       # in the user's web browser for suggest queries.
       #
-      #     results = client.suggest("swiftype-api-example", "gla")
+      #     results = client.suggest("site-search-api-example", "gla")
       #     results['videos'] # => [{'external_id' => 'v1uyQZNg2vE', 'title' => 'How It Feels [through Glass]', ...}, ...]
       #
       # @param [String] engine_id the Engine slug or ID
       # @param [String] query the search terms
-      # @param [Hash] options search options (see {the REST API docs}[https://swiftype.com/documentation/searching] for a complete list)
+      # @param [Hash] options search options (see {the REST API docs}[https://swiftype.com/documentation/site-search/searching] for a complete list)
       # @option options [Integer] :page page number of results to fetch (server defaults to 1)
       # @option options [Integer] :per_page number of results per page (server defaults to 20)
       # @option options [Array] :document_types an array of DocumentType slugs to search.
@@ -77,20 +77,20 @@ module Swiftype
       # @option options [Hash] :fetch_fields a Hash of DocumentType slug to array of the fields to return with results
       #   (example: <code>{'videos' => ['title', 'channel_id']}</code>)
       # @option options [Hash] :search_fields a Hash of DocumentType slug to array of the fields to search.
-      #   May contain {field weight boosts}[https://swiftype.com/documentation/searching#field_weights]
+      #   May contain {field weight boosts}[https://swiftype.com/documentation/site-search/searching/field-weights]
       #   (example: <code>{'videos' => ['title^5', 'tags^2', 'caption']}</code>).
       #   The server defaults to searching all +string+ fields for suggest queries.
       # @option options [Hash] :filters a Hash of DocumentType slug to filter definition Hash.
-      #   See {filters in the REST API documentation}[https://swiftype.com/documentation/searching#filters] for more details
+      #   See {filters in the REST API documentation}[https://swiftype.com/documentation/site-search/searching/filtering] for more details
       #   (example: <code>{'videos' => {'category_id' => ['23', '25']}}</code>)
-      # @option options [Hash] :functional_boosts a Hash of DocumentType slug to {functional boost}[https://swiftype.com/documentation/searching#functional_boosts] definition
+      # @option options [Hash] :functional_boosts a Hash of DocumentType slug to {functional boost}[https://swiftype.com/documentation/site-search/searching/boosting] definition
       #   (example: <code>{'videos' => {'view_count' => 'logarithmic'}}</code>).
       # @option options [Hash] :sort_field a Hash of DocumentType slug to field name to sort on
       #   (example: <code>{'videos' => 'view_count'}</code>)
       # @option options [Hash] :sort_direction a Hash of DocumentType slug to direction to sort
       #   (example: <code>'videos' => 'desc'</code>). Usually used with +:sort_field+.
       #
-      # @return [Swiftype::ResultSet]
+      # @return [ElasticSiteSearch::ResultSet]
       def suggest(engine_id, query, options={})
         search_params = { :q => query }.merge(options)
         response = post("engines/#{engine_id}/suggest.json", search_params)
@@ -99,12 +99,12 @@ module Swiftype
 
       # Perform a full-text search over all the DocumentTypes of the provided engine.
       #
-      #     results = client.search("swiftype-api-example", "glass")
+      #     results = client.search("site-search-api-example", "glass")
       #     results['videos'] # => [{'external_id' => 'v1uyQZNg2vE', 'title' => 'How It Feels [through Glass]', ...}, ...]
       #
       # @param [String] engine_id the Engine slug or ID
       # @param [String] query the search terms (may be nil)
-      # @param [Hash] options search options (see {the REST API docs}[https://swiftype.com/documentation/searching] for a complete list)
+      # @param [Hash] options search options (see {the REST API docs}[https://swiftype.com/documentation/site-search/searching] for a complete list)
       # @option options [Integer] :page page number of results to fetch (server defaults to 1)
       # @option options [Integer] :per_page number of results per page (server defaults to 20)
       # @option options [Array] :document_types an array of DocumentType slugs to search.
@@ -113,13 +113,13 @@ module Swiftype
       # @option options [Hash] :fetch_fields a Hash of DocumentType slug to array of the fields to return with results
       #   (example: <code>{'videos' => ['title', 'channel_id']}</code>)
       # @option options [Hash] :search_fields a Hash of DocumentType slug to array of the fields to search.
-      #   May contain {field weight boosts}[https://swiftype.com/documentation/searching#field_weights]
+      #   May contain {field weight boosts}[https://swiftype.com/documentation/site-search/searching/field-weights]
       #   (example: <code>{'videos' => ['title^5', 'tags^2', 'caption']}</code>).
       #   The server defaults to searching all +string+ and +text+ fields for search queries.
       # @option options [Hash] :filters a Hash of DocumentType slug to filter definition Hash.
-      #   See {filters in the REST API documentation}[https://swiftype.com/documentation/searching#filters] for more details
+      #   See {filters in the REST API documentation}[https://swiftype.com/documentation/site-search/searching/filtering] for more details
       #   (example: <code>{'videos' => {'category_id' => ['23', '25']}}</code>)
-      # @option options [Hash] :functional_boosts a Hash of DocumentType slug to {functional boost}[https://swiftype.com/documentation/searching#functional_boosts] definition
+      # @option options [Hash] :functional_boosts a Hash of DocumentType slug to {functional boost}[https://swiftype.com/documentation/site-search/searching/boosting] definition
       #   (example: <code>{'videos' => {'view_count' => 'logarithmic'}}</code>).
       # @option options [Hash] :facets a Hash of DocumentType slug to an Array of field names to provide facetted counts for
       #   (example: <code>{'videos' => ['category_id', 'channel_id']}</code>)
@@ -128,7 +128,7 @@ module Swiftype
       # @option options [Hash] :sort_direction a Hash of DocumentType slug to direction to sort
       #   (example: <code>'videos' => 'desc'</code>). Usually used with +:sort_field+.
       #
-      # @return [Swiftype::ResultSet]
+      # @return [ElasticSiteSearch::ResultSet]
       def search(engine_id, query, options={})
         search_params = { :q => query }.merge(options)
         response = post("engines/#{engine_id}/search.json", search_params)
@@ -137,15 +137,15 @@ module Swiftype
 
       # Perform an autocomplete (prefix) search over a single DocumentType in an Engine.
       # This can be used to implement type-ahead autocompletion. However, if your data is not sensitive,
-      # you should consider using the {Swiftype public JSONP API}[https://swiftype.com/documentation/public_api]
+      # you should consider using the {Site Search public JSONP API}[https://swiftype.com/documentation/site-search/searching#public_search]
       # in the user's web browser for suggest queries.
       #
-      #     results = client.suggest_document_type("swiftype-api-example", "videos", "gla")
+      #     results = client.suggest_document_type("site-search-api-example", "videos", "gla")
       #     results['videos'] # => [{'external_id' => 'v1uyQZNg2vE', 'title' => 'How It Feels [through Glass]', ...}, ...]
       #
       # @param [String] engine_id the Engine slug or ID
       # @param [String] query the search terms
-      # @param [Hash] options search options (see {the REST API docs}[https://swiftype.com/documentation/searching] for a complete list)
+      # @param [Hash] options search options (see {the REST API docs}[https://swiftype.com/documentation/site-search/searching] for a complete list)
       # @option options [Integer] :page page number of results to fetch (server defaults to 1)
       # @option options [Integer] :per_page number of results per page (server defaults to 20)
       # @option options [Array] :document_types an array of DocumentType slugs to search.
@@ -154,20 +154,20 @@ module Swiftype
       # @option options [Hash] :fetch_fields a Hash of DocumentType slug to array of the fields to return with results
       #   (example: <code>{'videos' => ['title', 'channel_id']}</code>)
       # @option options [Hash] :search_fields a Hash of DocumentType slug to array of the fields to search.
-      #   May contain {field weight boosts}[https://swiftype.com/documentation/searching#field_weights]
+      #   May contain {field weight boosts}[https://swiftype.com/documentation/site-search/searching/field-weights]
       #   (example: <code>{'videos' => ['title^5', 'tags^2', 'caption']}</code>).
       #   The server defaults to searching all +string+ fields for suggest queries.
       # @option options [Hash] :filters a Hash of DocumentType slug to filter definition Hash.
-      #   See {filters in the REST API documentation}[https://swiftype.com/documentation/searching#filters] for more details
+      #   See {filters in the REST API documentation}[https://swiftype.com/documentation/site-search/searching/filtering] for more details
       #   (example: <code>{'videos' => {'category_id' => ['23', '25']}}</code>)
-      # @option options [Hash] :functional_boosts a Hash of DocumentType slug to {functional boost}[https://swiftype.com/documentation/searching#functional_boosts] definition
+      # @option options [Hash] :functional_boosts a Hash of DocumentType slug to {functional boost}[https://swiftype.com/documentation/site-search/searching/boosting] definition
       #   (example: <code>{'videos' => {'view_count' => 'logarithmic'}}</code>).
       # @option options [Hash] :sort_field a Hash of DocumentType slug to field name to sort on
       #   (example: <code>{'videos' => 'view_count'}</code>)
       # @option options [Hash] :sort_direction a Hash of DocumentType slug to direction to sort
       #   (example: <code>'videos' => 'desc'</code>). Usually used with +:sort_field+.
       #
-      # @return [Swiftype::ResultSet]
+      # @return [ElasticSiteSearch::ResultSet]
       def suggest_document_type(engine_id, document_type_id, query, options={})
         search_params = { :q => query }.merge(options)
         response = post("engines/#{engine_id}/document_types/#{document_type_id}/suggest.json", search_params)
@@ -176,25 +176,25 @@ module Swiftype
 
       # Perform a full-text search over a single DocumentType in an Engine.
       #
-      #     results = client.search_document_type("swiftype-api-example", "videos", "glass")
+      #     results = client.search_document_type("site-search-api-example", "videos", "glass")
       #     results['videos'] # => [{'external_id' => 'v1uyQZNg2vE', 'title' => 'How It Feels [through Glass]', ...}, ...]
       #
       # @param [String] engine_id the Engine slug or ID
       # @param [String] document_type_id the DocumentType slug or ID
       # @param [String] query the search terms (may be nil)
-      # @param [Hash] options search options (see {the REST API docs}[https://swiftype.com/documentation/searching] for a complete list)
+      # @param [Hash] options search options (see {the REST API docs}[https://swiftype.com/documentation/site-search/searching] for a complete list)
       # @option options [Integer] :page page number of results to fetch (server defaults to 1)
       # @option options [Integer] :per_page number of results per page (server defaults to 20)
       # @option options [Hash] :fetch_fields a Hash of DocumentType slug to array of the fields to return with results
       #   (example: <code>{'videos' => ['title', 'channel_id']}</code>)
       # @option options [Hash] :search_fields a Hash of DocumentType slug to array of the fields to search.
-      #   May contain {field weight boosts}[https://swiftype.com/documentation/searching#field_weights]
+      #   May contain {field weight boosts}[https://swiftype.com/documentation/site-search/searching/field-weights]
       #   (example: <code>{'videos' => ['title^5', 'tags^2', 'caption']}</code>).
       #   The server defaults to searching all +string+ and +text+ fields for search queries.
       # @option options [Hash] :filters a Hash of DocumentType slug to filter definition Hash.
-      #   See {filters in the REST API documentation}[https://swiftype.com/documentation/searching#filters] for more details
+      #   See {filters in the REST API documentation}[https://swiftype.com/documentation/site-search/searching/filtering] for more details
       #   (example: <code>{'videos' => {'category_id' => ['23', '25']}}</code>)
-      # @option options [Hash] :functional_boosts a Hash of DocumentType slug to {functional boost}[https://swiftype.com/documentation/searching#functional_boosts] definition
+      # @option options [Hash] :functional_boosts a Hash of DocumentType slug to {functional boost}[https://swiftype.com/documentation/site-search/searching/boosting] definition
       #   (example: <code>{'videos' => {'view_count' => 'logarithmic'}}</code>).
       # @option options [Hash] :facets a Hash of DocumentType slug to an Array of field names to provide facetted counts for
       #   (example: <code>{'videos' => ['category_id', 'channel_id']}</code>)
@@ -203,7 +203,7 @@ module Swiftype
       # @option options [Hash] :sort_direction a Hash of DocumentType slug to direction to sort
       #   (example: <code>'videos' => 'desc'</code>). Usually used with +:sort_field+.
       #
-      # @return [Swiftype::ResultSet]
+      # @return [ElasticSiteSearch::ResultSet]
       def search_document_type(engine_id, document_type_id, query, options={})
         search_params = { :q => query }.merge(options)
         response = post("engines/#{engine_id}/document_types/#{document_type_id}/search.json", search_params)
@@ -219,8 +219,8 @@ module Swiftype
       # @option options [Integer] :per_page users to return per page (server defaults to 50)
       def users(options={})
         params = {
-          :client_id => Swiftype.platform_client_id,
-          :client_secret => Swiftype.platform_client_secret
+          :client_id => ElasticSiteSearch.platform_client_id,
+          :client_secret => ElasticSiteSearch.platform_client_secret
         }
         get("users.json", params.merge(options))
       end
@@ -228,26 +228,26 @@ module Swiftype
       # Create a new user for the configured application.
       def create_user
         params = {
-          :client_id => Swiftype.platform_client_id,
-          :client_secret => Swiftype.platform_client_secret
+          :client_id => ElasticSiteSearch.platform_client_id,
+          :client_secret => ElasticSiteSearch.platform_client_secret
         }
         post("users.json", params)
       end
 
       # Return a user created by the configured application.
       #
-      # @param user_id [String] the Swiftype User ID
+      # @param user_id [String] the Site Search User ID
       def user(user_id)
         params = {
-          :client_id => Swiftype.platform_client_id,
-          :client_secret => Swiftype.platform_client_secret
+          :client_id => ElasticSiteSearch.platform_client_id,
+          :client_secret => ElasticSiteSearch.platform_client_secret
         }
         get("users/#{user_id}.json", params)
       end
     end
 
     # An Engine is a search engine that lets you search and filter the Documents it contains.
-    # For more information, see the {REST API overview}[https://swiftype.com/documentation/overview].
+    # For more information, see the {REST API overview}[https://swiftype.com/documentation/site-search/overview].
     module Engine
       def engines
         get("engines.json")
@@ -266,7 +266,7 @@ module Swiftype
       end
     end
 
-    # Every Document must belong to a DocumentType. For more information, see the {REST API overview}[https://swiftype.com/documentation/overview].
+    # Every Document must belong to a DocumentType. For more information, see the {REST API overview}[https://swiftype.com/documentation/site-search/overview].
     module DocumentType
       def document_types(engine_id)
         get("engines/#{engine_id}/document_types.json")
@@ -287,7 +287,7 @@ module Swiftype
 
     # Documents have fields that can be searched or filtered.
     #
-    # For more information on indexing documents, see the {REST API indexing documentation}[https://swiftype.com/documentation/indexing].
+    # For more information on indexing documents, see the {REST API indexing documentation}[https://swiftype.com/documentation/site-search/indexing].
     module Document
       def documents(engine_id, document_type_id, page=nil, per_page=nil)
         options = {}
@@ -349,7 +349,7 @@ module Swiftype
         post("document_receipts.json", :ids => receipt_ids)
       end
 
-      # Index a batch of documents using the {asynchronous API}[https://swiftype.com/documentation/asynchronous_indexing].
+      # Index a batch of documents using the {asynchronous API}[https://swiftype.com/documentation/site-search/indexing#asynchronous].
       # This is a good choice if you have a large number of documents.
       #
       # @param [String] engine_id the Engine slug or ID
@@ -382,8 +382,8 @@ module Swiftype
       end
     end
 
-    # The analytics API provides a way to export analytics data similar to what is found in the Swiftype Dashboard.
-    # See the {REST API Documentation}[https://swiftype.com/documentation/analytics] for details.
+    # The analytics API provides a way to export analytics data similar to what is found in the Site Search Dashboard.
+    # See the {REST API Documentation}[https://swiftype.com/documentation/site-search/analytics] for details.
     module Analytics
       # Return the number of searches that occurred on each day in the time range for the provided Engine and optional DocumentType.
       # The maximum time range between start and end dates is 30 days.
@@ -501,7 +501,7 @@ module Swiftype
     # A Clickthrough represents a user clicking on a full-text search result.
     #
     # If you are routing searches through your own server instead of
-    # executing them client-side with the Swiftype JavaScript API, you
+    # executing them client-side with the Site Search JavaScript API, you
     # will need to record clickthroughs yourself.
     module Clickthrough
       # Log a clickthrough for a Document.
@@ -518,13 +518,13 @@ module Swiftype
       end
     end
 
-    include Swiftype::Client::User
-    include Swiftype::Client::Search
-    include Swiftype::Client::Engine
-    include Swiftype::Client::DocumentType
-    include Swiftype::Client::Document
-    include Swiftype::Client::Analytics
-    include Swiftype::Client::Domain
-    include Swiftype::Client::Clickthrough
+    include ElasticSiteSearch::Client::User
+    include ElasticSiteSearch::Client::Search
+    include ElasticSiteSearch::Client::Engine
+    include ElasticSiteSearch::Client::DocumentType
+    include ElasticSiteSearch::Client::Document
+    include ElasticSiteSearch::Client::Analytics
+    include ElasticSiteSearch::Client::Domain
+    include ElasticSiteSearch::Client::Clickthrough
   end
 end

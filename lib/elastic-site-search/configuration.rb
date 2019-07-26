@@ -1,10 +1,10 @@
 require 'uri'
-require 'swiftype/version'
+require 'elastic-site-search/version'
 
-module Swiftype
+module ElasticSiteSearch
   module Configuration
     DEFAULT_ENDPOINT = "https://api.swiftype.com/api/v1/"
-    DEFAULT_USER_AGENT = "Swiftype-Ruby/#{Swiftype::VERSION}"
+    DEFAULT_USER_AGENT = "Swiftype-Ruby/#{ElasticSiteSearch::VERSION}"
 
     VALID_OPTIONS_KEYS = [
       :api_key,
@@ -30,7 +30,7 @@ module Swiftype
       self
     end
 
-    # Yields the Swiftype::Configuration module which can be used to set configuration options.
+    # Yields the ElasticSiteSearch::Configuration module which can be used to set configuration options.
     #
     # @return self
     def configure

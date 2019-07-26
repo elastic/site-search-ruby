@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: post
-    uri: http://hello:@localhost:3000/api/v1/engines/swiftype-api-example/document_types/videos/documents/async_bulk_create_or_update.json
+    uri: http://hello:@localhost:3000/api/v1/engines/site-search-api-example/document_types/videos/documents/async_bulk_create_or_update.json
     body:
       encoding: UTF-8
       string: '{"documents":[{"external_id":"failed_doc","fields":[{"type":"string","name":"title"}]}]}'
@@ -43,6 +43,6 @@ http_interactions:
       encoding: UTF-8
       string: '{"document_receipts":[{"id":"54821785cea2601e1b000005","external_id":"failed_doc","link":"http://localhost:3000/api/v1/document_receipts/54821785cea2601e1b000005.json","status":"failed","errors":["Missing
         required parameter: value"]}],"batch_link":"http://localhost:3000/api/v1/document_receipts.json?ids=54821785cea2601e1b000005"}'
-    http_version: 
+    http_version:
   recorded_at: Fri, 05 Dec 2014 20:37:25 GMT
 recorded_with: VCR 2.9.3

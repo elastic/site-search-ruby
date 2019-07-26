@@ -1,8 +1,8 @@
-require 'swiftype/client'
-require 'swiftype/sso'
+require 'elastic-site-search/client'
+require 'elastic-site-search/sso'
 
-module Swiftype
-  extend Swiftype::Configuration
+module ElasticSiteSearch
+  extend ElasticSiteSearch::Configuration
 
   def self.const_missing(const_name)
     super unless const_name == :Easy

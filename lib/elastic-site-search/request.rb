@@ -1,14 +1,14 @@
 require 'net/https'
 if RUBY_VERSION < '1.9'
-  require 'swiftype/ext/backport-uri'
+  require 'elastic-site-search/ext/backport-uri'
 else
   require 'uri'
 end
 require 'json'
-require 'swiftype/exceptions'
+require 'elastic-site-search/exceptions'
 require 'openssl'
 
-module Swiftype
+module ElasticSiteSearch
   module Request
     def get(path, params={})
       request(:get, path, params)
@@ -54,7 +54,7 @@ module Swiftype
     # @raise [Timeout::Error] when the timeout expires
     def request(method, path, params={})
       Timeout.timeout(overall_timeout) do
-        uri = URI.parse("#{Swiftype.endpoint}#{path}")
+        uri = URI.parse("#{ElasticSiteSearch.endpoint}#{path}")
 
         request = build_request(method, uri, params)
 
@@ -90,17 +90,17 @@ module Swiftype
       when Net::HTTPSuccess
         response
       when Net::HTTPUnauthorized
-        raise Swiftype::InvalidCredentials, error_message_from_response(response)
+        raise ElasticSiteSearch::InvalidCredentials, error_message_from_response(response)
       when Net::HTTPNotFound
-        raise Swiftype::NonExistentRecord, error_message_from_response(response)
+        raise ElasticSiteSearch::NonExistentRecord, error_message_from_response(response)
       when Net::HTTPConflict
-        raise Swiftype::RecordAlreadyExists, error_message_from_response(response)
+        raise ElasticSiteSearch::RecordAlreadyExists, error_message_from_response(response)
       when Net::HTTPBadRequest
-        raise Swiftype::BadRequest, error_message_from_response(response)
+        raise ElasticSiteSearch::BadRequest, error_message_from_response(response)
       when Net::HTTPForbidden
-        raise Swiftype::Forbidden, error_message_from_response(response)
+        raise ElasticSiteSearch::Forbidden, error_message_from_response(response)
       else
-        raise Swiftype::UnexpectedHTTPException, "#{response.code} #{response.body}"
+        raise ElasticSiteSearch::UnexpectedHTTPException, "#{response.code} #{response.body}"
       end
     end
 
@@ -134,7 +134,7 @@ module Swiftype
         req.body = JSON.generate(params) unless params.length == 0
       end
 
-      req['User-Agent'] = Swiftype.user_agent
+      req['User-Agent'] = ElasticSiteSearch.user_agent
       req['Content-Type'] = 'application/json'
 
       if platform_access_token
