@@ -413,6 +413,6 @@ We welcome contributors to the project. Before you begin, a couple notes...
 
 ## License 📗
 
-[MIT](https://github.com/elastic/site-search-rubyblob/master/LICENSE) © [Elastic](https://github.com/elastic)
+[Apache 2.0](https://github.com/elastic/site-search-rubyblob/master/LICENSE) © [Elastic](https://github.com/elastic)
 
 Thank you to all the [contributors](https://github.com/elastic/site-search-rubygraphs/contributors)!
