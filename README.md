@@ -391,55 +391,6 @@ You can also specifiy a date range for queries without results:
 
     top_no_result_queries = client.analytics_top_no_result_queries('site-search-api-example', {:start_date => '2013-01-01', :end_date => '2013-01-07'})
 
-## Migrating from previous versions
-
-TODO Delete me:
-
-swiftype-rb 1.0 has been rewritten to be simpler and easier to use. However, it is not compatable with the previous version, 0.0.5.
-
-To upgrade from the old version of swiftype-rb:
-
-TODO: Delete ME
-
-- If you previously used the `Swiftype` client, migrate your API calls to the `Swiftype::Client` format.
-- If you previously used the `Swiftype::Easy` client, change `Swiftype::Easy` to `Swiftype::Client`. Almost all method calls should be the same (there are a few minor changes).
-
-Additionally, the result object returned by search methods (for example, the old Swiftype gem's `Engine#search` or `Swiftype::Easy#search` methods) returns results in a different way. Instead of being an array of `Swiftype::Document` objects, it will be an array of Hashes.
-
-Code like this:
-
-    client = Swiftype::Easy.new
-    results = client.search("engine_slug", "search term")
-    results.each do |result|
-      puts result.title
-    end
-
-Should be changed to this:
-
-    client = Elastic::SiteSearch::Client.new
-    results = client.search("engine_slug", "search term")
-    results.each do |result|
-      puts result['title']
-    end
-
-If you are not able to upgrade, lock your gem version to 0.0.5 by adding this to your Gemfile:
-
-    gem 'swiftype, '= 0.0.5'
-
-To upgrade from the beta swiftype-easy-rb library (which was the precursor of swiftype-rb 1.0), change `Swiftype::Easy` to `Swiftype::Client` and move your configuration from the `Swiftype::Easy` module to the `Swiftype` module. For example:
-
-    Swiftype:Easy.configure do |configure|
-      config.api_key = 'your_api_key'
-    end
-
-can be converted to
-
-    Elastic::SiteSearch.configure do |config|
-      config.api_key = 'your_api_key'
-    end
-
-or simply `Elastic::SiteSearch.api_key = 'your_api_key'`.
-
 ## Development
 
 You can run tests with `rspec`.

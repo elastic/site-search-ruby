@@ -10,11 +10,6 @@ module Elastic
 
       include Elastic::SiteSearch::Request
 
-      def self.configure(&block)
-        warn "`Swiftype::Easy.configure` has been deprecated. Use `Elastic::SiteSearch.configure` instead."
-        Elastic::SiteSearch.configure &block
-      end
-
       # Create a new Elastic::SiteSearch::Client client
       #
       # @param options [Hash] a hash of configuration options that will override what is set on the Elastic::SiteSearch class.
