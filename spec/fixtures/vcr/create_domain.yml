@@ -9,8 +9,10 @@ http_interactions:
     headers:
       Accept:
       - ! '*/*'
-      User-Agent:
-      - Swiftype-Ruby/1.0.0
+      X-Swiftype-Client:
+      - elastic-app-search-ruby
+      X-Swiftype-Client-Version:
+      - 1.0.0
       Content-Type:
       - application/json
   response:
@@ -40,6 +42,6 @@ http_interactions:
     body:
       encoding: US-ASCII
       string: ! '{"id":"52324b132ed960589800004a","engine_id":"51534c502ed960a1e6000005","submitted_url":"http://www.zombo.com/","start_crawl_url":"http://www.zombo.com/","crawling":false,"document_count":0,"updated_at":"2013-09-12T23:15:32Z"}'
-    http_version: 
+    http_version:
   recorded_at: Thu, 12 Sep 2013 23:15:33 GMT
 recorded_with: VCR 2.5.0

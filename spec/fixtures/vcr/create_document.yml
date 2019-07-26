@@ -12,8 +12,10 @@ http_interactions:
       headers:
         Accept:
           - ! "*/*"
-        User-Agent:
-          - Swiftype-Ruby/1.0.0
+        X-Swiftype-Client:
+          - elastic-app-search-ruby
+        X-Swiftype-Client-Version:
+          - 1.0.0
         Content-Type:
           - application/json
     response:

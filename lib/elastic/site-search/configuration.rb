@@ -5,7 +5,6 @@ module Elastic
   module SiteSearch
     module Configuration
       DEFAULT_ENDPOINT = "https://api.swiftype.com/api/v1/"
-      DEFAULT_USER_AGENT = "Swiftype-Ruby/#{Elastic::SiteSearch::VERSION}"
 
       VALID_OPTIONS_KEYS = [
         :api_key,
@@ -25,7 +24,7 @@ module Elastic
       def reset
         self.api_key = nil
         self.endpoint = DEFAULT_ENDPOINT
-        self.user_agent = DEFAULT_USER_AGENT
+        self.user_agent = nil
         self.platform_client_id = nil
         self.platform_client_secret = nil
         self

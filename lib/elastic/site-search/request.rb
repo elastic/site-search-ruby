@@ -10,6 +10,9 @@ require 'openssl'
 
 module Elastic
   module SiteSearch
+    CLIENT_NAME = 'elastic-site-search-ruby'
+    CLIENT_VERSION = Elastic::SiteSearch::VERSION
+
     module Request
       def get(path, params={})
         request(:get, path, params)
@@ -135,8 +138,10 @@ module Elastic
           req.body = JSON.generate(params) unless params.length == 0
         end
 
-        req['User-Agent'] = Elastic::SiteSearch.user_agent
+        req['User-Agent'] = Elastic::SiteSearch.user_agent if Elastic::SiteSearch.user_agent
         req['Content-Type'] = 'application/json'
+        req['X-Swiftype-Client'] = CLIENT_NAME
+        req['X-Swiftype-Client-Version'] = CLIENT_VERSION
 
         if platform_access_token
           req['Authorization'] = "Bearer #{platform_access_token}"
