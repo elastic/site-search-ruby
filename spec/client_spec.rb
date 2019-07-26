@@ -1,11 +1,11 @@
 require 'spec_helper'
 
-describe ElasticSiteSearch::Client do
+describe Elastic::SiteSearch::Client do
   let(:engine_slug) { 'site-search-api-example' }
-  let(:client) { ElasticSiteSearch::Client.new }
+  let(:client) { Elastic::SiteSearch::Client.new }
 
   before :each do
-    ElasticSiteSearch.api_key = 'hello'
+    Elastic::SiteSearch.api_key = 'hello'
   end
 
   context 'Search' do
@@ -68,7 +68,7 @@ describe ElasticSiteSearch::Client do
   end
 
   context 'Options' do
-    let(:options_client) { ElasticSiteSearch::Client.new(options) }
+    let(:options_client) { Elastic::SiteSearch::Client.new(options) }
 
     context '#request' do
       context 'open_timeout' do
@@ -93,8 +93,8 @@ describe ElasticSiteSearch::Client do
         context 'without timeout specified' do
           let(:options) { Hash.new }
           it 'omits the option' do
-            expect(options_client.overall_timeout).to eq(ElasticSiteSearch::Client::DEFAULT_TIMEOUT.to_f)
-            expect(Timeout).to receive(:timeout).with(ElasticSiteSearch::Client::DEFAULT_TIMEOUT.to_f).and_call_original
+            expect(options_client.overall_timeout).to eq(Elastic::SiteSearch::Client::DEFAULT_TIMEOUT.to_f)
+            expect(Timeout).to receive(:timeout).with(Elastic::SiteSearch::Client::DEFAULT_TIMEOUT.to_f).and_call_original
             VCR.use_cassette(:engine_search) do
               options_client.search(engine_slug, 'cat')
             end
@@ -603,7 +603,7 @@ describe ElasticSiteSearch::Client do
         VCR.use_cassette(:analytics_top_queries_too_large) do
           expect do
             top_queries = client.analytics_top_queries(engine_slug, :start_date => '2013-01-01', :end_date => '2013-05-01')
-          end.to raise_error(ElasticSiteSearch::BadRequest)
+          end.to raise_error(Elastic::SiteSearch::BadRequest)
         end
       end
     end
@@ -651,7 +651,7 @@ describe ElasticSiteSearch::Client do
         VCR.use_cassette(:find_domain_failure) do
           expect do
             domain = client.domain(engine_slug, 'bogus')
-          end.to raise_error(ElasticSiteSearch::NonExistentRecord)
+          end.to raise_error(Elastic::SiteSearch::NonExistentRecord)
         end
       end
     end
@@ -685,7 +685,7 @@ describe ElasticSiteSearch::Client do
         VCR.use_cassette(:recrawl_domain_failure) do
           expect do
             domain = client.recrawl_domain(engine_slug, domain_id)
-          end.to raise_error(ElasticSiteSearch::Forbidden)
+          end.to raise_error(Elastic::SiteSearch::Forbidden)
         end
       end
     end
@@ -720,7 +720,7 @@ describe ElasticSiteSearch::Client do
         VCR.use_cassette(:log_clickthrough_failure) do
           expect do
             client.log_clickthrough(engine_slug, document_type_slug, nil, external_id)
-          end.to raise_error(ElasticSiteSearch::BadRequest)
+          end.to raise_error(Elastic::SiteSearch::BadRequest)
         end
       end
     end

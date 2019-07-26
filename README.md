@@ -57,7 +57,7 @@ Or place `gem 'elastic-site-search-ruby', '~> 1.4.0` in your `Gemfile` and run `
 
 Before issuing commands to the API, configure the client with your API key:
 
-    ElasticSiteSearch.api_key = 'YOUR_API_KEY'
+    Elastic::SiteSearch.api_key = 'YOUR_API_KEY'
 
 You can find your API key in your [Account Settings](https://app.swiftype.com/settings/account).
 
@@ -65,21 +65,21 @@ TODO: Delete me
 
 If you're using Heroku, you can configure the client with the `SWIFTYPE_URL` configuration variable:
 
-    ElasticSiteSearch.authenticated_url = ENV['SWIFTYPE_URL']
+    Elastic::SiteSearch.authenticated_url = ENV['SWIFTYPE_URL']
 
 ### Create a client
 
-    client = ElasticSiteSearch::Client.new
+    client = Elastic::SiteSearch::Client.new
 
 You can also provide the API key when creating the client instance:
 
-    client = ElasticSiteSearch::Client.new(:api_key => 'different_api_key')
+    client = Elastic::SiteSearch::Client.new(:api_key => 'different_api_key')
 
-If the API key is provided as an option to constructor, it will override the globally configured ElasticSiteSearch API key (if any).
+If the API key is provided as an option to constructor, it will override the globally configured Elastic::SiteSearch API key (if any).
 
 ### Specifying an HTTP Proxy
 
-    client = ElasticSiteSearch::Client.new(:api_key => 'api_key', :proxy => 'http://localhost:8888')
+    client = Elastic::SiteSearch::Client.new(:api_key => 'api_key', :proxy => 'http://localhost:8888')
 
 This client will also support configuring a proxy via the environment variable `http_proxy`.
 
@@ -416,7 +416,7 @@ Code like this:
 
 Should be changed to this:
 
-    client = ElasticSiteSearch::Client.new
+    client = Elastic::SiteSearch::Client.new
     results = client.search("engine_slug", "search term")
     results.each do |result|
       puts result['title']
@@ -434,11 +434,11 @@ To upgrade from the beta swiftype-easy-rb library (which was the precursor of sw
 
 can be converted to
 
-    ElasticSiteSearch.configure do |config|
+    Elastic::SiteSearch.configure do |config|
       config.api_key = 'your_api_key'
     end
 
-or simply `ElasticSiteSearch.api_key = 'your_api_key'`.
+or simply `Elastic::SiteSearch.api_key = 'your_api_key'`.
 
 ## Development
 

@@ -1,9 +1,9 @@
 $:.push File.expand_path("../lib", __FILE__)
-require "elastic-site-search/version"
+require "elastic/site-search/version"
 
 Gem::Specification.new do |s|
   s.name        = "elastic-site-search-ruby"
-  s.version     = ElasticSiteSearch::VERSION
+  s.version     = Elastic::SiteSearch::VERSION
   s.authors     = ["Quin Hoxie", "Matt Riley"]
   s.email       = ["support@elastic.co"]
   s.homepage    = "https://github.com/elastic/site-search-ruby"

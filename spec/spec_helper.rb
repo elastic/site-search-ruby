@@ -2,7 +2,7 @@ require 'bundler/setup'
 require 'rspec'
 require 'vcr'
 require 'awesome_print'
-require 'elastic-site-search'
+require 'elastic/site-search'
 
 RSpec.configure do |config|
   # Run specs in random order to surface order dependencies. If you find an
@@ -18,10 +18,10 @@ RSpec.configure do |config|
   end
 
   config.before :each do
-    ElasticSiteSearch.endpoint = "http://hello:@localhost:3000/api/v1/"
+    Elastic::SiteSearch.endpoint = "http://hello:@localhost:3000/api/v1/"
   end
 
   config.after :each do
-    ElasticSiteSearch.reset
+    Elastic::SiteSearch.reset
   end
 end
