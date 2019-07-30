@@ -2,15 +2,17 @@
 http_interactions:
 - request:
     method: post
-    uri: http://hello:@localhost:3000/api/v1/engines/swiftype-api-example/search.json
+    uri: http://hello:@localhost:3000/api/v1/engines/site-search-api-example/search.json
     body:
       encoding: UTF-8
       string: ! '{"q":null,"facets":{"videos":["category_id"]}}'
     headers:
       Accept:
       - ! '*/*'
-      User-Agent:
-      - Swiftype-Ruby/1.0.0
+      X-Swiftype-Client:
+      - elastic-app-search-ruby
+      X-Swiftype-Client-Version:
+      - 1.0.0
       Content-Type:
       - application/json
   response:
@@ -157,6 +159,6 @@ http_interactions:
         research and building civic capacity around the world.\r\n \r\nTo learn more
         about the RSA, visit: thersa.org\r\n\r\nOur events are made possible with
         the support of our Fellowship. Support us by donating or applying to bec","subscriber_count":243017,"view_count":2434953,"video_count":557,"url":"http://www.youtube.com/user/theRSAorg","published_at":"2009-08-06T10:21:23Z","id":"51b92fa92ed960a844000264","_score":1.0,"_type":"51b92f992ed960a84400024b","_index":"51b92f982ed960a844000248","_version":null,"sort":null,"highlight":{},"_explanation":null}]},"info":{"videos":{"query":"","current_page":1,"num_pages":1,"per_page":20,"total_result_count":15,"facets":{"category_id":{"23":4,"28":2,"15":2,"25":1,"22":1,"2":1,"10":1}}},"channels":{"query":"","current_page":1,"num_pages":1,"per_page":20,"total_result_count":12,"facets":{}}},"errors":{}}'
-    http_version: 
+    http_version:
   recorded_at: Fri, 13 Sep 2013 23:30:14 GMT
 recorded_with: VCR 2.5.0

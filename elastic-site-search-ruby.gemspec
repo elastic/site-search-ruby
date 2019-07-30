@@ -1,14 +1,15 @@
 $:.push File.expand_path("../lib", __FILE__)
-require "swiftype/version"
+require "elastic/site-search/version"
 
 Gem::Specification.new do |s|
-  s.name        = "swiftype"
-  s.version     = Swiftype::VERSION
+  s.name        = "elastic-site-search-ruby"
+  s.version     = Elastic::SiteSearch::VERSION
   s.authors     = ["Quin Hoxie", "Matt Riley"]
-  s.email       = ["team@swiftype.com"]
-  s.homepage    = "https://swiftype.com"
-  s.summary     = %q{Official gem for accessing the Swiftype Search API}
-  s.description = %q{API client for accessing the Swiftype Search API with no dependencies (on Ruby 1.9, JSON needed for Ruby 1.8).}
+  s.email       = ["support@elastic.co"]
+  s.homepage    = "https://github.com/elastic/site-search-ruby"
+  s.summary     = %q{Official gem for accessing the Elastic Site Search API}
+  s.description = %q{API client for accessing the Elastic Site Search API with no dependencies (on Ruby 1.9, JSON needed for Ruby 1.8).}
+  s.licenses    = ['Apache-2.0']
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

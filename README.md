@@ -1,26 +1,24 @@
+<p align="center"><img src="https://github.com/elastic/site-search-ruby/blob/master/logo-site-search.png?raw=true" alt="Elastic Site Search Logo"></p>
 
-<p align="center"><img src="https://github.com/swiftype/swiftype-rb/blob/master/logo-site-search.png?raw=true" alt="Elastic Site Search Logo"></p>
-
-<p align="center"><a href="https://travis-ci.org/swiftype/swiftype-rb"><img src="https://travis-ci.org/swiftype/swiftype-rb.png" alt="Travis build"></a>
-<a href="https://github.com/swiftype/swiftype-rb/releases"><img src="https://img.shields.io/github/release/swiftype/swiftype-rb/all.svg?style=flat-square" alt="GitHub release" /></a></p>
+<a href="https://github.com/elastic/site-search-ruby/releases"><img src="https://img.shields.io/github/release/elastic/site-search-ruby/all.svg?style=flat-square" alt="GitHub release" /></a></p>
 
 > A first-party Ruby client for the [Elastic Site Search API](https://swiftype.com/documentation/site-search/overview).
 
 ## Contents
 
-+ [Getting started](#getting-started-)
-+ [Usage](#usage)
-+ [Migrating from pervious versions](#migrating-from-previous-versions)
-+ [Development](#development)
-+ [FAQ](#faq-)
-+ [Contribute](#contribute-)
-+ [License](#license-)
+- [Getting started](#getting-started-)
+- [Usage](#usage)
+- [Migrating from pervious versions](#migrating-from-previous-versions)
+- [Development](#development)
+- [FAQ](#faq-)
+- [Contribute](#contribute-)
+- [License](#license-)
 
-***
+---
 
 ## Getting started 🐣
 
-Before beginning with the Swiftype gem, you should be familar with the concepts behind the Swiftype API:
+Before beginning with the `elastic-site-search-ruby` gem, you should be familiar with the concepts behind the Elastic Site Search API:
 
 1. **Engines**
 2. **DocumentTypes**
@@ -30,27 +28,27 @@ An **Engine** is a search engine.
 
 It can contain one or more **DocumentTypes** which are collections of **Documents**.
 
-A **Document** is a collection of fields that can be queried using the Swiftype API.
+A **Document** is a collection of fields that can be queried using the Site Search API.
 
-Documents have a special **external_id** field that ties a Document in Swiftype to a record in your system. The layout of fields of the Documents belonging to a DocumentType is called a **schema**. Fields may be strings, integers, geographic locations, and so forth.
+Documents have a special **external_id** field that ties a Document in Site Search to a record in your system. The layout of fields of the Documents belonging to a DocumentType is called a **schema**. Fields may be strings, integers, geographic locations, and so forth.
 
 The Documents in your Engine can be searched two ways: **full-text** (`search`) or **autocomplete** (`suggest`). The difference is that autocomplete queries work on prefixes (for example, "gla" will match "glass"). This is less accurate in general, but is useful for implementing type-ahead search drop downs.
 
 You can think of an Engine as a database, DocumentTypes as tables, and Documents as rows. Using the API, you can search an Engine for all Documents containing a word. You can also search an individual DocumentType, or any subset of DocumentTypes.
 
-The examples in this documentation use the schema defined in the [swiftype-api-example](https://github.com/swiftype/swiftype-api-example) project, which is based on YouTube. It has two DocumentTypes, **videos** and **channels**. Using the script found in the swiftype-api-example project, you can create your own search engine that matches the examples and try the queries for yourself.
+The examples in this documentation use the schema defined in the [site-search-api-example](https://github.com/swiftype/swiftype-api-example) project, which is based on YouTube. It has two DocumentTypes, **videos** and **channels**. Using the script found in the site-search-api-example project, you can create your own search engine that matches the examples and try the queries for yourself.
 
-To learn more about the Swiftype API, read the [API overview](https://swiftype.com/documentation/overview) and our [schema design tutorial](https://swiftype.com/documentation/tutorials/schema_design).
+To learn more about the Site Search API, read the [API overview](https://swiftype.com/documentation/site-search/overview) and our [schema design tutorial](https://swiftype.com/documentation/site-search/guides/schema-design).
 
 Depends on Ruby.
 
 To install the gem, execute:
 
-    gem install swiftype
+    gem install elastic-site-search-ruby
 
-Or place `gem 'swiftype', '~> 1.4.0` in your `Gemfile` and run `bundle install`.
+Or place `gem 'elastic-site-search-ruby', '~> 1.4.0` in your `Gemfile` and run `bundle install`.
 
-> **Note:** This client has been developed for the [Swiftype Site Search](https://www.swiftype.com/site-search) API endpoints only.
+> **Note:** This client has been developed for the [Elastic Site Search](https://www.elastic.co/products/site-search/service) API endpoints only.
 
 ## Usage
 
@@ -58,27 +56,23 @@ Or place `gem 'swiftype', '~> 1.4.0` in your `Gemfile` and run `bundle install`.
 
 Before issuing commands to the API, configure the client with your API key:
 
-    Swiftype.api_key = 'YOUR_API_KEY'
+    Elastic::SiteSearch.api_key = 'YOUR_API_KEY'
 
-You can find your API key in your [Account Settings](https://swiftype.com/settings/account).
-
-If you're using Heroku, you can configure the client with the `SWIFTYPE_URL` configuration variable:
-
-    Swiftype.authenticated_url = ENV['SWIFTYPE_URL']
+You can find your API key in your [Account Settings](https://app.swiftype.com/settings/account).
 
 ### Create a client
 
-    client = Swiftype::Client.new
+    client = Elastic::SiteSearch::Client.new
 
 You can also provide the API key when creating the client instance:
 
-    client = Swiftype::Client.new(:api_key => 'different_api_key')
+    client = Elastic::SiteSearch::Client.new(:api_key => 'different_api_key')
 
-If the API key is provided as an option to constructor, it will override the globally configured Swiftype API key (if any).
+If the API key is provided as an option to constructor, it will override the globally configured Elastic::SiteSearch API key (if any).
 
 ### Specifying an HTTP Proxy
 
-    client = Swiftype::Client.new(:api_key => 'api_key', :proxy => 'http://localhost:8888')
+    client = Elastic::SiteSearch::Client.new(:api_key => 'api_key', :proxy => 'http://localhost:8888')
 
 This client will also support configuring a proxy via the environment variable `http_proxy`.
 
@@ -86,21 +80,21 @@ This client will also support configuring a proxy via the environment variable `
 
 If you want to search for `cat` on your engine, you can use:
 
-    results = client.search('swiftype-api-example', 'cat')
+    results = client.search('site-search-api-example', 'cat')
     results['videos']   # => [{'external_id' => 'QH2-TGUlwu4', 'title' => 'Nyan Cat [original]', ... }, ... ]
     results['channels'] # => [{'external_id' => 'UC3VHfy8e1jbDnT5TG2pjP1w', 'title' => 'saraj00n', ... }, ... ]
 
 To limit the search to only the `videos` DocumentType:
 
-    results = client.search_document_type('swiftype-api-example', 'videos', 'cat')
+    results = client.search_document_type('site-search-api-example', 'videos', 'cat')
     results['videos']   # => [{'external_id' => 'QH2-TGUlwu4', 'title' => 'Nyan Cat [original]', ... }, ... ]
     results['channels'] # => nil
 
-Both search methods allow you to specify options to filter or sort on fields, boost the weight of certain fields, calculate faceted counts, and so on. For more details on these options, review the [Search Options](https://swiftype.com/documentation/searching).
+Both search methods allow you to specify options to filter or sort on fields, boost the weight of certain fields, calculate faceted counts, and so on. For more details on these options, review the [Search Options](https://swiftype.com/documentation/site-search/searching).
 
 Here is an example for showing only videos in the "Pets & Animals" category (which has ID 23):
 
-    results = client.search_document_type('swiftype-api-example', 'videos', 'cat', {:filters => {'videos' => {:category_id => '23'}}})
+    results = client.search_document_type('site-search-api-example', 'videos', 'cat', {:filters => {'videos' => {:category_id => '23'}}})
 
 ### Autocomplete search
 
@@ -108,17 +102,17 @@ Autocomplete (also known as suggest, prefix, or type-ahead) searches can be used
 
 You can perform a suggest query across all of your Engine's Documents:
 
-    results = client.suggest("swiftype-api-example", "gla")
+    results = client.suggest("site-search-api-example", "gla")
     results['videos'] # => [{'external_id' => 'v1uyQZNg2vE', 'title' => 'How It Feels [through Glass]', ...}, ...]
 
 or just for one DocumentType:
 
-    results = client.suggest_document_type("swiftype-api-example", "videos", "gla")
+    results = client.suggest_document_type("site-search-api-example", "videos", "gla")
     results['videos'] # => [{'external_id' => 'v1uyQZNg2vE', 'title' => 'How It Feels [through Glass]', ...}, ...]
 
 or add options to have more control over the results:
 
-    results = client.suggest('swiftype-api-example', 'glass', {:sort_field => {'videos' => 'view_count'}, :sort_direction => {'videos' => 'desc'}})
+    results = client.suggest('site-search-api-example', 'glass', {:sort_field => {'videos' => 'view_count'}, :sort_direction => {'videos' => 'desc'}})
 
 ### Engines
 
@@ -126,58 +120,58 @@ Retrieve every Engine:
 
     engines = client.engines
 
-Create a new Engine with the name `swiftype-api-example`:
+Create a new Engine with the name `site-search-api-example`:
 
-    engine = client.create_engine('swiftype-api-example')
+    engine = client.create_engine('site-search-api-example')
 
 Retrieve an Engine by `slug` or `id`:
 
-    engine = client.engine('swiftype-api-example')
+    engine = client.engine('site-search-api-example')
     engine = client.engine('5230b9102ed960ba20000021')
 
 Delete an Engine by `slug` or the `id`:
 
-    client.destroy_engine('swiftype-api-example')
+    client.destroy_engine('site-search-api-example')
 
 ### Document Types
 
 List all the
 
-Retrieve `DocumentTypes`s of the Engine with the `slug` field `swiftype-api-example`:
+Retrieve `DocumentTypes`s of the Engine with the `slug` field `site-search-api-example`:
 
-    document_types = client.document_types('swiftype-api-example')
+    document_types = client.document_types('site-search-api-example')
 
 Show the second batch of documents:
 
-    document_types = client.document_types('swiftype-api-example', 2)
+    document_types = client.document_types('site-search-api-example', 2)
 
 Create a new DocumentType for an Engine with the name `videos`:
 
-    document_type = client.create_document_type('swiftype-api-example', 'videos')
+    document_type = client.create_document_type('site-search-api-example', 'videos')
 
 Retrieve an DocumentType by `slug` or `id`:
 
-    document_type = client.document_type('swiftype-api-example', 'videos')
+    document_type = client.document_type('site-search-api-example', 'videos')
 
 Delete a DocumentType using the `slug` or `id` of it:
 
-    client.destroy_document_type('swiftype-api-example', 'videos')
+    client.destroy_document_type('site-search-api-example', 'videos')
 
 ### Documents
 
-Retrieve the first page of Documents of Engine `swiftype-api-example` and DocumentType `videos`:
+Retrieve the first page of Documents of Engine `site-search-api-example` and DocumentType `videos`:
 
-    documents = client.documents('swiftype-api-example', 'videos')
+    documents = client.documents('site-search-api-example', 'videos')
 
 Retrieve a specific Document using its `id` or `external_id`:
 
-    document = client.document('swiftype-api-example', 'videos', 'FHtvDA0W34I')
+    document = client.document('site-search-api-example', 'videos', 'FHtvDA0W34I')
 
 To create or update. single or multiple documents, we use the method `index_documents`.
 
 Create a new Document with mandatory `external_id` and user-defined fields:
 
-    document = client.index_documents('swiftype-api-example', 'videos', {
+    document = client.index_documents('site-search-api-example', 'videos', {
         :external_id => 'FHtvDA0W34I',
         :fields => [
             {:name => 'title', :value => "Felix Baumgartner's supersonic freefall from 128k' - Mission Highlights", :type => 'string'},
@@ -187,7 +181,7 @@ Create a new Document with mandatory `external_id` and user-defined fields:
 
 Create multiple Documents at once and return status for each Document creation:
 
-    response = client.index_documents('swiftype-api-example', 'videos', [{
+    response = client.index_documents('site-search-api-example', 'videos', [{
         :external_id => 'FHtvDA0W34I',
         :fields => [
             {:name => 'title', :value => "Felix Baumgartner's supersonic freefall from 128k' - Mission Highlights", :type => 'string'},
@@ -203,13 +197,13 @@ Create multiple Documents at once and return status for each Document creation:
 
 Update fields of an existing Document specified by `id` or `external_id`:
 
-    client.index_documents('swiftype-api-example', 'videos', 'FHtvDA0W34I', {:title =>'New Title'})
+    client.index_documents('site-search-api-example', 'videos', 'FHtvDA0W34I', {:title =>'New Title'})
 
 **NOTE:** A field must already exist on a Document in order to update it.
 
 Update multiple Documents at once:
 
-    response = client.index_documents('swiftype-api-example','videos', [
+    response = client.index_documents('site-search-api-example','videos', [
         {:external_id => 'FHtvDA0W34I', :fields => {:view_count => 32874417}},
         {:external_id => 'dMH0bHeiRNg', :fields => {:view_count => 98323493}}
     ])
@@ -243,7 +237,7 @@ All methods above will have a return in the following format:
 
 For instance, to Create multiple Documents at once:
 
-    response = client.index_documents('swiftype-api-example', 'videos', [{
+    response = client.index_documents('site-search-api-example', 'videos', [{
         :external_id => 'FHtvDA0W34I',
         :fields => [
             {:name => 'title', :value => "Felix Baumgartner's supersonic freefall from 128k' - Mission Highlights", :type => 'string'},
@@ -311,11 +305,11 @@ To check the status of documents with their document_receipt ids:
 
 Destroy a Document by external_id:
 
-    client.destroy_document('swiftype-api-example','videos','dFs9WO2B8uI')
+    client.destroy_document('site-search-api-example','videos','dFs9WO2B8uI')
 
 Destroy multiple Documents at once:
 
-    response = client.destroy_documents('swiftype-api-example', 'videos', ['QH2-TGUlwu4, 'v1uyQZNg2vE', 'ik5sdwYZ01Q'])
+    response = client.destroy_documents('site-search-api-example', 'videos', ['QH2-TGUlwu4, 'v1uyQZNg2vE', 'ik5sdwYZ01Q'])
     #=> [true, true, true]
 
 ### Domains
@@ -350,90 +344,45 @@ Add or update a URL for a Domain:
 
 ### Analytics
 
-Swiftype records the number of searches, autoselects (when a user clicks a link from a suggest result), and clickthroughs (when a user clicks through to an item from a search result list. You can view this information in your Swiftype Dashboard, but you can also export it using the API.
+Site Search records the number of searches, autoselects (when a user clicks a link from a suggest result), and clickthroughs (when a user clicks through to an item from a search result list. You can view this information in your Site Search Dashboard, but you can also export it using the API.
 
 To get the number of searches per day from an Engine in the last 14 days:
 
-    searches = client.analytics_searches('swiftype-api-example')
+    searches = client.analytics_searches('site-search-api-example')
     #=> [['2013-09-13', '123'], [2013-09-12', '94'], ... ]
 
 You can also use a specific start and/or end date:
 
-    searches = client.analytics_searches('swiftype-api-example', {:start_date => '2013-01-01', :end_date => '2013-01-07'})
+    searches = client.analytics_searches('site-search-api-example', {:start_date => '2013-01-01', :end_date => '2013-01-07'})
 
 To get the number of autoselects in the past 14 days:
 
-    autoselects = client.analytics_autoselects('swiftype-api-example')
+    autoselects = client.analytics_autoselects('site-search-api-example')
 
 As with searches you can also limit by start and/or end date:
 
-    autoselects = client.analytics_autoselects('swiftype-api-example', {:start_date => '2013-01-01', :end_date => '2013-01-07'})
+    autoselects = client.analytics_autoselects('site-search-api-example', {:start_date => '2013-01-01', :end_date => '2013-01-07'})
 
 If you are interested in the top queries for your Engine you can use:
 
-    top_queries = client.analytics_top_queries('swiftype-api-example')
+    top_queries = client.analytics_top_queries('site-search-api-example')
     # => [['query term', 123], ['another query', 121], ['yet another query', 92], ...]
 
 To see more top queries you can paginate through them using:
 
-    top_queries = client.analytics_top_queries('swiftype-api-example', {:page => 2})
+    top_queries = client.analytics_top_queries('site-search-api-example', {:page => 2})
 
 Or you can get the top queries in a specific date range:
 
-    top_queries = client.analytics_top_queries('swiftype-api-example', {:start_date => '2013-01-01', :end_date => '2013-01-07'})
+    top_queries = client.analytics_top_queries('site-search-api-example', {:start_date => '2013-01-01', :end_date => '2013-01-07'})
 
 If you want to improve you search results, you should always have a look at search queries, that return no results and perhaps add some Documents that match for this query or use our pining feature to add Documents for this query:
 
-    top_no_result_queries = client.analytics_top_no_result_queries('swiftype-api-example')
+    top_no_result_queries = client.analytics_top_no_result_queries('site-search-api-example')
 
 You can also specifiy a date range for queries without results:
 
-    top_no_result_queries = client.analytics_top_no_result_queries('swiftype-api-example', {:start_date => '2013-01-01', :end_date => '2013-01-07'})
-
-## Migrating from previous versions
-
-swiftype-rb 1.0 has been rewritten to be simpler and easier to use. However, it is not compatable with the previous version, 0.0.5.
-
-To upgrade from the old version of swiftype-rb:
-
-- If you previously used the `Swiftype` client, migrate your API calls to the `Swiftype::Client` format.
-- If you previously used the `Swiftype::Easy` client, change `Swiftype::Easy` to `Swiftype::Client`. Almost all method calls should be the same (there are a few minor changes).
-
-Additionally, the result object returned by search methods (for example, the old Swiftype gem's `Engine#search` or `Swiftype::Easy#search` methods) returns results in a different way. Instead of being an array of `Swiftype::Document` objects, it will be an array of Hashes.
-
-Code like this:
-
-    client = Swiftype::Easy.new
-    results = client.search("engine_slug", "search term")
-    results.each do |result|
-      puts result.title
-    end
-
-Should be changed to this:
-
-    client = Swiftype::Client.new
-    results = client.search("engine_slug", "search term")
-    results.each do |result|
-      puts result['title']
-    end
-
-If you are not able to upgrade, lock your gem version to 0.0.5 by adding this to your Gemfile:
-
-    gem 'swiftype, '= 0.0.5'
-
-To upgrade from the beta swiftype-easy-rb library (which was the precursor of swiftype-rb 1.0), change `Swiftype::Easy` to `Swiftype::Client` and move your configuration from the `Swiftype::Easy` module to the `Swiftype` module. For example:
-
-    Swiftype:Easy.configure do |configure|
-      config.api_key = 'your_api_key'
-    end
-
-can be converted to
-
-    Swiftype.configure do |config|
-      config.api_key = 'your_api_key'
-    end
-
-or simply `Swiftype.api_key = 'your_api_key'`.
+    top_no_result_queries = client.analytics_top_no_result_queries('site-search-api-example', {:start_date => '2013-01-01', :end_date => '2013-01-07'})
 
 ## Development
 
@@ -445,7 +394,7 @@ All HTTP interactions are stubbed out using VCR.
 
 ### Where do I report issues with the client?
 
-If something is not working as expected, please open an [issue](https://github.com/swiftype/swiftype-rb/issues/new).
+If something is not working as expected, please open an [issue](https://github.com/elastic/site-search-ruby/issues/new).
 
 ### Where can I learn more about Site Search?
 
@@ -459,11 +408,11 @@ You can checkout the [Elastic Site Search community discuss forums](https://disc
 
 We welcome contributors to the project. Before you begin, a couple notes...
 
-+ Before opening a pull request, please create an issue to [discuss the scope of your proposal](https://github.com/swiftype/swiftype-rb/issues).
-+ Please write simple code and concise documentation, when appropriate.
+- Before opening a pull request, please create an issue to [discuss the scope of your proposal](https://github.com/elastic/site-search-ruby/issues).
+- Please write simple code and concise documentation, when appropriate.
 
 ## License 📗
 
-[MIT](https://github.com/swiftype/swiftype-rb/blob/master/LICENSE) © [Elastic](https://github.com/elastic)
+[Apache 2.0](https://github.com/elastic/site-search-ruby/blob/master/LICENSE) © [Elastic](https://github.com/elastic)
 
-Thank you to all the [contributors](https://github.com/swiftype/swiftype-rb/graphs/contributors)!
+Thank you to all the [contributors](https://github.com/elastic/site-search-ruby/graphs/contributors)!

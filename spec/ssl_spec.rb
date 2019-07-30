@@ -5,29 +5,29 @@ require 'spec_helper'
 # that the connection was made and the approriate error message is
 # returned from the API
 describe 'SSL support' do
-  let(:client) { Swiftype::Client.new }
+  let(:client) { Elastic::SiteSearch::Client.new }
 
   context 'when the endpoint is configured to use SSL' do
     it 'connects successfully' do
-      Swiftype.endpoint = 'https://api.swiftype.com/api/v1/'
+      Elastic::SiteSearch.endpoint = 'https://api.swiftype.com/api/v1/'
 
       VCR.turned_off do
         WebMock.allow_net_connect!
         expect do
-          client.search('swiftype-api-example', 'test')
-        end.to raise_error(Swiftype::InvalidCredentials)
+          client.search('site-search-api-example', 'test')
+        end.to raise_error(Elastic::SiteSearch::InvalidCredentials)
       end
     end
   end
 
   context 'when the endpoint is configured not to use SSL' do
     it 'connects successfully' do
-      Swiftype.endpoint = 'http://api.swiftype.com/api/v1/'
+      Elastic::SiteSearch.endpoint = 'http://api.swiftype.com/api/v1/'
       VCR.turned_off do
         WebMock.allow_net_connect!
         expect do
-          client.search('swiftype-api-example', 'test')
-        end.to raise_error(Swiftype::InvalidCredentials)
+          client.search('site-search-api-example', 'test')
+        end.to raise_error(Elastic::SiteSearch::InvalidCredentials)
       end
     end
   end

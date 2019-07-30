@@ -9,8 +9,10 @@ http_interactions:
     headers:
       Accept:
       - ! '*/*'
-      User-Agent:
-      - Swiftype-Ruby/1.0.0
+      X-Swiftype-Client:
+      - elastic-app-search-ruby
+      X-Swiftype-Client-Version:
+      - 1.0.0
       Content-Type:
       - application/json
   response:
@@ -50,6 +52,6 @@ http_interactions:
     body:
       encoding: US-ASCII
       string: ! '[["2013-01-07",0],["2013-01-06",0],["2013-01-05",0],["2013-01-04",0],["2013-01-03",2],["2013-01-02",0],["2013-01-01",0]]'
-    http_version: 
+    http_version:
   recorded_at: Fri, 13 Sep 2013 00:00:27 GMT
 recorded_with: VCR 2.5.0

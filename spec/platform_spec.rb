@@ -1,13 +1,13 @@
 require 'spec_helper'
 
 describe 'platform user API' do
-  let(:client) { Swiftype::Client.new }
+  let(:client) { Elastic::SiteSearch::Client.new }
 
   context 'authentication' do
     it 'succeeds with api_key and correct client_id and client_secret' do
-      Swiftype.api_key = 'hello'
-      Swiftype.platform_client_id = '0d94f7cf2bd1e65a7e1f9f929d1bcb2b248af69b8112d24484e87014125538f8'
-      Swiftype.platform_client_secret = 'f600fb0b16b516cbb9b9f0eeb60f3b35f685b5ec4a94694ae57b5bbb8860f240'
+      Elastic::SiteSearch.api_key = 'hello'
+      Elastic::SiteSearch.platform_client_id = '0d94f7cf2bd1e65a7e1f9f929d1bcb2b248af69b8112d24484e87014125538f8'
+      Elastic::SiteSearch.platform_client_secret = 'f600fb0b16b516cbb9b9f0eeb60f3b35f685b5ec4a94694ae57b5bbb8860f240'
 
       VCR.use_cassette('list_users') do
         expect do
@@ -17,8 +17,8 @@ describe 'platform user API' do
     end
 
     it 'fails without api_key' do
-      Swiftype.platform_client_id = '0d94f7cf2bd1e65a7e1f9f929d1bcb2b248af69b8112d24484e87014125538f8'
-      Swiftype.platform_client_secret = 'f600fb0b16b516cbb9b9f0eeb60f3b35f685b5ec4a94694ae57b5bbb8860f240'
+      Elastic::SiteSearch.platform_client_id = '0d94f7cf2bd1e65a7e1f9f929d1bcb2b248af69b8112d24484e87014125538f8'
+      Elastic::SiteSearch.platform_client_secret = 'f600fb0b16b516cbb9b9f0eeb60f3b35f685b5ec4a94694ae57b5bbb8860f240'
 
       VCR.use_cassette('users_no_api_key') do
         expect do
@@ -28,7 +28,7 @@ describe 'platform user API' do
     end
 
     it 'fails with missing client_id and client_secret' do
-      Swiftype.api_key = 'hello'
+      Elastic::SiteSearch.api_key = 'hello'
 
       VCR.use_cassette('users_no_client_id_or_secret') do
         expect do
@@ -38,8 +38,8 @@ describe 'platform user API' do
     end
 
     it 'fails with incorrect client_secret' do
-      Swiftype.platform_client_id = '0d94f7cf2bd1e65a7e1f9f929d1bcb2b248af69b8112d24484e87014125538f8'
-      Swiftype.platform_client_secret = 'wrong'
+      Elastic::SiteSearch.platform_client_id = '0d94f7cf2bd1e65a7e1f9f929d1bcb2b248af69b8112d24484e87014125538f8'
+      Elastic::SiteSearch.platform_client_secret = 'wrong'
 
       VCR.use_cassette('users_client_secret_incorrect') do
         expect do
@@ -51,9 +51,9 @@ describe 'platform user API' do
 
   context 'with proper authentication' do
     before :each do
-      Swiftype.api_key = 'hello'
-      Swiftype.platform_client_id = '0d94f7cf2bd1e65a7e1f9f929d1bcb2b248af69b8112d24484e87014125538f8'
-      Swiftype.platform_client_secret = 'f600fb0b16b516cbb9b9f0eeb60f3b35f685b5ec4a94694ae57b5bbb8860f240'
+      Elastic::SiteSearch.api_key = 'hello'
+      Elastic::SiteSearch.platform_client_id = '0d94f7cf2bd1e65a7e1f9f929d1bcb2b248af69b8112d24484e87014125538f8'
+      Elastic::SiteSearch.platform_client_secret = 'f600fb0b16b516cbb9b9f0eeb60f3b35f685b5ec4a94694ae57b5bbb8860f240'
     end
 
     context 'creating a user' do
