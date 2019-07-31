@@ -1,6 +1,6 @@
 <p align="center"><img src="https://github.com/elastic/site-search-ruby/blob/master/logo-site-search.png?raw=true" alt="Elastic Site Search Logo"></p>
 
-<p align="center"><a href="https://circleci.com/gh/elastic/app-search-ruby"><img src="https://circleci.com/gh/elastic/app-search-ruby.svg?style=svg" alt="CircleCI build"></a></p>
+<p align="center"><a href="https://circleci.com/gh/elastic/site-search-ruby"><img src="https://circleci.com/gh/elastic/site-search-ruby.svg?style=svg" alt="CircleCI build"></a></p>
 
 > A first-party Ruby client for the [Elastic Site Search API](https://swiftype.com/documentation/site-search/overview).
 
