@@ -18,7 +18,7 @@
 
 ## Getting started 🐣
 
-Before beginning with the `elastic-site-search-ruby` gem, you should be familiar with the concepts behind the Elastic Site Search API:
+Before beginning with the `elastic-site-search` gem, you should be familiar with the concepts behind the Elastic Site Search API:
 
 1. **Engines**
 2. **DocumentTypes**
@@ -44,9 +44,9 @@ Depends on Ruby.
 
 To install the gem, execute:
 
-    gem install elastic-site-search-ruby
+    gem install elastic-site-search
 
-Or place `gem 'elastic-site-search-ruby', '~> 1.4.0` in your `Gemfile` and run `bundle install`.
+Or place `gem 'elastic-site-search', '~> 2.0.0` in your `Gemfile` and run `bundle install`.
 
 > **Note:** This client has been developed for the [Elastic Site Search](https://www.elastic.co/products/site-search/service) API endpoints only.
 
