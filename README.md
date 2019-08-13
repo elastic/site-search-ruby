@@ -16,6 +16,8 @@
 
 ---
 
+Test
+
 ## Getting started 🐣
 
 Before beginning with the `elastic-site-search` gem, you should be familiar with the concepts behind the Elastic Site Search API:
