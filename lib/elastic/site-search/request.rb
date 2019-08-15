@@ -93,20 +93,28 @@ module Elastic
         case response
         when Net::HTTPSuccess
           response
-        when Net::HTTPUnauthorized
-          raise Elastic::SiteSearch::InvalidCredentials, error_message_from_response(response)
-        when Net::HTTPNotFound
-          raise Elastic::SiteSearch::NonExistentRecord, error_message_from_response(response)
-        when Net::HTTPConflict
-          raise Elastic::SiteSearch::RecordAlreadyExists, error_message_from_response(response)
-        when Net::HTTPBadRequest
-          raise Elastic::SiteSearch::BadRequest, error_message_from_response(response)
-        when Net::HTTPForbidden
-          raise Elastic::SiteSearch::Forbidden, error_message_from_response(response)
         else
+          EXCEPTION_MAP.each do |response_class, exception_class|
+            if response.is_a?(response_class)
+              raise exception_class, error_message_from_response(response)
+            end
+          end
+
           raise Elastic::SiteSearch::UnexpectedHTTPException, "#{response.code} #{response.body}"
         end
       end
+
+      EXCEPTION_MAP = {
+        Net::HTTPUnauthorized => Elastic::SiteSearch::InvalidCredentials,
+        Net::HTTPNotFound => Elastic::SiteSearch::NonExistentRecord,
+        Net::HTTPConflict => Elastic::SiteSearch::RecordAlreadyExists,
+        Net::HTTPBadRequest => Elastic::SiteSearch::BadRequest,
+        Net::HTTPForbidden => Elastic::SiteSearch::Forbidden,
+        Net::HTTPInternalServerError => Elastic::SiteSearch::InternalServerError,
+        Net::HTTPBadGateway => Elastic::SiteSearch::BadGateway,
+        Net::HTTPServiceUnavailable => Elastic::SiteSearch::ServiceUnavailable,
+        Net::HTTPGatewayTimeOut => Elastic::SiteSearch::GatewayTimeout
+      }.freeze
 
       def error_message_from_response(response)
         body = response.body
