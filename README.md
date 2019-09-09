@@ -46,7 +46,7 @@ To install the gem, execute:
 
     gem install elastic-site-search
 
-Or place `gem 'elastic-site-search', '~> 2.0.0` in your `Gemfile` and run `bundle install`.
+Or place `gem 'elastic-site-search', '~> 2.1.0` in your `Gemfile` and run `bundle install`.
 
 > **Note:** This client has been developed for the [Elastic Site Search](https://www.elastic.co/products/site-search/service) API endpoints only.
 
