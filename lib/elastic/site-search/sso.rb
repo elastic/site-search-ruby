@@ -1,4 +1,4 @@
-require 'digest/sha1'
+require 'digest/sha2'
 
 module Elastic
   module SiteSearch
@@ -15,7 +15,7 @@ module Elastic
       end
 
       def self.token(user_id, timestamp)
-        Digest::SHA1.hexdigest("#{user_id}:#{Elastic::SiteSearch.platform_client_secret}:#{timestamp}")
+        Digest::SHA256.hexdigest("#{user_id}:#{Elastic::SiteSearch.platform_client_secret}:#{timestamp}")
       end
     end
   end
