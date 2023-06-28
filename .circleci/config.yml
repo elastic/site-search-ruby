@@ -8,6 +8,7 @@ executors:
   ruby-26: { docker: [{ image: "ruby:2.6" }] }
   ruby-27: { docker: [{ image: "ruby:2.7" }] }
   ruby-30: { docker: [{ image: "ruby:3.0" }] }
+  jruby-92: { docker: [{ image: "jruby:9.2.20-jdk" }] }
   jruby-93: { docker: [{ image: "jruby:9.3.4-jdk" }] }
 
 jobs:
@@ -66,5 +67,6 @@ workflows:
       - build: { name: run-tests-ruby-2.6, executor: ruby-26 }
       - build: { name: run-tests-ruby-2.7, executor: ruby-27 }
       - build: { name: run-tests-ruby-3.0, executor: ruby-30 }
+      - build: { name: run-tests-jruby-92, executor: jruby-92 }
       - build: { name: run-tests-jruby-93, executor: jruby-93 }
 
